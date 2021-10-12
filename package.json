@@ -1,0 +1,22 @@
+{
+  "name": "jonathanchosson_7_12102021",
+  "version": "1.0.0",
+  "description": "Projet 7 OC ",
+  "main": "index.js",
+  "scripts": {
+    "doc": "jsdoc -c jsdoc.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonathanChosson/JonathanChosson_7_12102021.git"
+  },
+  "author": "Jonathan Chosson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JonathanChosson/JonathanChosson_7_12102021/issues"
+  },
+  "homepage": "https://github.com/JonathanChosson/JonathanChosson_7_12102021#readme",
+  "devDependencies": {
+    "jsdoc": "^3.6.7"
+  }
+}
