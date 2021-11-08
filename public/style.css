@@ -8,3 +8,25 @@
     color: white !important;
     background-color:#ED6454 !important;
 }
+
+.ellipsisDesc{
+    overflow: hidden;
+    height: 200px;
+}
+
+.ellipsis{
+    width: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardPerso{
+    width: 33%;
+}
+
+@media screen and (max-width: 576px) {
+    .cardPerso{
+        width: 100%;
+    }
+}
