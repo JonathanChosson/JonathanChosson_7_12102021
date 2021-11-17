@@ -112,14 +112,19 @@ function ecouteRecherche(){
  * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
  */
 function rechercheTag(tableauRecherche){
-    for (let i = 0; i < tableauRecherche.length; i++) {
-        if(tableauRecherche[i].length > 2){
-            rechercheTagCategorie(tableauRecherche[i], "ingredients");
-            rechercheTagCategorie(tableauRecherche[i], "appareil");
-            rechercheTagCategorie(tableauRecherche[i], "ustensiles");
+    rechercheGlobal(tableauRecherche)
+    if(rechercheEnCours.length > 0){
+        afficheCard(rechercheEnCours);
+    }else{
+        for (let i = 0; i < tableauRecherche.length; i++) {
+            if(tableauRecherche[i].length > 2){
+                rechercheTagCategorie(tableauRecherche[i], "ingredients");
+                rechercheTagCategorie(tableauRecherche[i], "appareil");
+                rechercheTagCategorie(tableauRecherche[i], "ustensiles");
+            }
         }
     }
-    afficheCard(rechercheEnCours);
+    
 }
 
 /**
@@ -247,6 +252,17 @@ function fermetureTag(){
     }
 }
 
-
+function rechercheGlobal(tableauRecherche){
+    console.log(tableauRecherche);
+    for (let j = 0; j < tableauRecherche.length; j++) {
+        for (let i = 0; i < recipes.length; i++) {
+            console.log(recipes[i]);
+            if(recipes[i].name.toUpperCase().split(' ').includes(tableauRecherche[j].toUpperCase())){
+                ajoutRecetteRecherche(recipes[i]);
+            }
+        }
+    }
+    afficheCard(rechercheEnCours);
+}
 ecouteRecherche();
 afficheCard(recipes);
