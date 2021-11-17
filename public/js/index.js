@@ -236,9 +236,12 @@ function fermetureTag(){
                 tableauTag.push(tagActif[i].tag);
             }
             tableauTag.splice(tableauTag.indexOf(fermer[i].id), 1);
-            console.log(tableauTag);
             tagActif = [];
-            rechercheTag(tableauTag);
+            if(tableauTag.length >0){
+                rechercheTag(tableauTag);
+            }else{
+                afficheCard(recipes);
+            }
             afficheTag();
         })
     }
