@@ -4,6 +4,7 @@ console.log(recipes);
 let main = document.getElementById('main');
 let champRecherche = document.getElementById('champRecherche');
 let bntRecherche = document.getElementsByClassName('fa-search');
+let fermer = document.getElementsByClassName('fermer');
 
 //variables Globales
 let rechercheEnCours = [];
@@ -77,6 +78,7 @@ function afficheTag(){
         div.append(spanActif);    
     }
     champRecherche.parentNode.insertAdjacentElement('afterend',div);
+    fermetureTag();
 }
 
 /**
@@ -92,8 +94,15 @@ function ecouteRecherche(){
             bntRecherche[0].parentNode.removeAttribute('disabled',"");
         }
     });
+    champRecherche.addEventListener('keypress', function(event){
+        if(event.key === "Enter" & champRecherche.value.length > 2){
+            rechercheTag(champRecherche.value.split(' '));
+            champRecherche.value ="";
+        }
+    })
     bntRecherche[0].parentNode.addEventListener('click', function(){
         rechercheTag(champRecherche.value.split(' '));
+        champRecherche.value ="";
         // rechercheClassique(champRecherche.value);  A CODER PLUS TARD 
     });
 };
@@ -154,7 +163,6 @@ function rechercheTagCategorie(tag, categorie){
                     }
                 }
             }
-            console.log(tableauTemporaire);
             if(tableauTemporaire.length > 0 ){
                 rechercheEnCours = tableauTemporaire;
             }
@@ -162,12 +170,10 @@ function rechercheTagCategorie(tag, categorie){
         else if(categorie === "appareil"){
             for (let i = 0; i < rechercheEnCours.length; i++) {
                 if(rechercheEnCours[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
-                    console.log(rechercheEnCours[i]);
                     tableauTemporaire.push(rechercheEnCours[i]);
                     ajoutTagActif(tag , 'a');
                 }
             }
-            console.log(tableauTemporaire);
             if(tableauTemporaire.length > 0 ){
                 rechercheEnCours = tableauTemporaire;
             }
@@ -176,13 +182,11 @@ function rechercheTagCategorie(tag, categorie){
             for (let i = 0; i < rechercheEnCours.length; i++) {
                 for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
                     if(rechercheEnCours[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
-                        console.log(rechercheEnCours[i]);
                         tableauTemporaire.push(rechercheEnCours[i]);
                         ajoutTagActif(tag , 'u');
                     }
                 }
             }
-            console.log(tableauTemporaire);
             if(tableauTemporaire.length > 0 ){
                 rechercheEnCours = tableauTemporaire;
             }
@@ -220,6 +224,26 @@ function ajoutTagActif(tag, source){
     }
     afficheTag();
 }
+
+/**
+ * Ecoute le clic sur le bouton fermer d'un tag 
+ */
+function fermetureTag(){
+    for (let i = 0; i < fermer.length; i++) {
+        fermer[i].addEventListener('click', function(){
+            let tableauTag = [];
+            for (let i = 0; i < tagActif.length; i++) {
+                tableauTag.push(tagActif[i].tag);
+            }
+            tableauTag.splice(tableauTag.indexOf(fermer[i].id), 1);
+            console.log(tableauTag);
+            tagActif = [];
+            rechercheTag(tableauTag);
+            afficheTag();
+        })
+    }
+}
+
 
 ecouteRecherche();
 afficheCard(recipes);
