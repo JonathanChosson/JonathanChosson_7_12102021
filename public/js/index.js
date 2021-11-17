@@ -112,12 +112,23 @@ function ecouteRecherche(){
  * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
  */
 function rechercheTag(tableauRecherche){
+<<<<<<< HEAD
     for (let i = 0; i < tableauRecherche.length; i++) {
         if(tableauRecherche[i].length > 2){
             rechercheTagCategorie(tableauRecherche[i]);
+=======
+    rechercheGlobal(tableauRecherche)
+    if(rechercheEnCours.length > 0){
+        afficheCard(rechercheEnCours);
+    }else{
+        for (let i = 0; i < tableauRecherche.length; i++) {
+            if(tableauRecherche[i].length > 2){
+                rechercheTagCategorie(tableauRecherche[i]);
+            }
+>>>>>>> version1
         }
     }
-    afficheCard(rechercheEnCours);
+    
 }
 
 /**
@@ -149,6 +160,7 @@ function rechercheTagCategorie(tag){
         for (let i = 0; i < rechercheEnCours.length; i++) {
             for (let j = 0; j < rechercheEnCours[i].ingredients.length; j++) {
                 if(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+<<<<<<< HEAD
                     tableauTemporaire.push(rechercheEnCours[i]);
                     ajoutTagActif(tag , 'i');
                 }
@@ -168,6 +180,28 @@ function rechercheTagCategorie(tag){
                 }
             }
         };
+=======
+                    console.log(rechercheEnCours[i]);
+                    tableauTemporaire.push(rechercheEnCours[i]);
+                    ajoutTagActif(tag , 'i');
+                }
+            }
+        }
+        for (let i = 0; i < rechercheEnCours.length; i++) {
+            if(rechercheEnCours[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+                tableauTemporaire.push(rechercheEnCours[i]);
+                ajoutTagActif(tag , 'a');
+            }
+        }
+        for (let i = 0; i < rechercheEnCours.length; i++) {
+            for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
+                if(rechercheEnCours[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+                    tableauTemporaire.push(rechercheEnCours[i]);
+                    ajoutTagActif(tag , 'u');
+                }
+            }
+        }
+>>>>>>> version1
         if(tableauTemporaire.length > 0 ){
             rechercheEnCours = tableauTemporaire;
         }
@@ -227,6 +261,17 @@ function fermetureTag(){
     }
 }
 
-
+function rechercheGlobal(tableauRecherche){
+    console.log(tableauRecherche);
+    for (let j = 0; j < tableauRecherche.length; j++) {
+        for (let i = 0; i < recipes.length; i++) {
+            console.log(recipes[i]);
+            if(recipes[i].name.toUpperCase().split(' ').includes(tableauRecherche[j].toUpperCase())){
+                ajoutRecetteRecherche(recipes[i]);
+            }
+        }
+    }
+    afficheCard(rechercheEnCours);
+}
 ecouteRecherche();
 afficheCard(recipes);
