@@ -27,9 +27,15 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import { recipes } from "./recipes.js";
-
+console.log(recipes);
 //Eléments du DOM
 let main = document.getElementById('main');
+let champRecherche = document.getElementById('champRecherche');
+let bntRecherche = document.getElementsByClassName('fa-search');
+
+//variables Globales
+let rechercheEnCours = [];
+let tagActif = [];
 
 /**
  * Génére et affiche une card par recette 
@@ -39,10 +45,10 @@ function afficheCard(tableauEntree){
     main.innerHTML =``;
     let div = document.createElement('div');
     tableauEntree.forEach(recette => {
-        console.log(recette);
+        // console.log(recette);
         let card = div.cloneNode(true);
-        card.classList.add('card','mb-2');
-        card.setAttribute('style', 'width:33%');
+        card.classList.add('card','mb-2','cardPerso');
+        // card.setAttribute('style', 'width:33%');
         card.innerHTML = `&lt;img src="./images/recettes-de-cuisine-en-video.jpg" class="card-img-top" alt="Image de la recette">`;
         let cardBody = div.cloneNode(true);
         cardBody.classList.add('card-body','bg-light');
@@ -57,22 +63,103 @@ function afficheCard(tableauEntree){
         let divIngredients = div.cloneNode(true);
         divIngredients.classList.add('d-flex', 'flex-column');
         recette.ingredients.forEach(ingredient => {
-            let span = document.createElement('span');
+            let span = document.createElement('small');
             let quantite = ingredient.quantity === undefined ? '' : `: ${ingredient.quantity}`;
             let unite = ingredient.unit === undefined ? '' : ingredient.unit;
             span.innerHTML = `&lt;span>${ingredient.ingredient} ${quantite} ${unite}&lt;/span>`;
             divIngredients.append(span)
         });
+        let divDescription = div.cloneNode(true);
+        divDescription.classList.add('col-6','ellipsisDesc');
+        divDescription.innerHTML = `&lt;p>${recette.description}&lt;/p>`;
         divRecette.append(divIngredients);
+        divRecette.append(divDescription);
         cardBody.append(divTitre);
         cardBody.append(divRecette);
         card.append(cardBody);
         main.append(card);
     });
+};
+
+/**
+ * Affiche à l'utilisateur les tags actifs
+ */
+function afficheTag(){
+    let div = document.createElement('div');
+    div.classList.add('mt2');
+    div.innerHTML ="TEST"
+    champRecherche.parentNode.insertAdjacentElement('afterend',div);
 }
 
+/**
+ * Ecoute la saisi sur le champ recherche
+ */
+function ecouteRecherche(){
+    bntRecherche[0].parentNode.setAttribute('disabled',"");
+    champRecherche.addEventListener('input', function(event){
+        if(event.target.value.length > 2){
+            bntRecherche[0].parentNode.removeAttribute('disabled',"");
+        }
+    })
+    bntRecherche[0].parentNode.addEventListener('click', function(){
+        rechercheTag(champRecherche.value.split(' '));
+        // rechercheClassique(champRecherche.value);  A CODER PLUS TARD 
+    })
+};
 
-afficheCard(recipes);</code></pre>
+/**
+ * fonction qui recherche pour chaque mot si c'est un tag
+ * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
+ */
+function rechercheTag(tableauRecherche){
+    for (let i = 0; i &lt; tableauRecherche.length; i++) {
+        if(tableauRecherche[i].length > 2){
+            rechercheIngredients(tableauRecherche[i]);
+        }
+    }
+}
+
+/**
+ * Vérifie que le mot en entrée est présent dans ingrédients 
+ * @param {string} tag 
+ */
+function rechercheIngredients(tag){
+    for (let i = 0; i &lt; recipes.length; i++) {
+        for (let j = 0; j &lt; recipes[i].ingredients.length; j++) {
+            if(recipes[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase())){
+                ajoutRecetteRecherche(recipes[i]);
+                ajoutTagActif(tag);
+            }
+        }
+    }
+}
+
+/**
+ * Vérifie si la recette fait déjà partie de la recherche
+ * @param {object} recette 
+ */
+function ajoutRecetteRecherche(recette){
+    if(!rechercheEnCours.includes(recette)){
+        rechercheEnCours.push(recette);
+    }
+    afficheCard(rechercheEnCours);
+}
+
+/**
+ * Vérifie si le tag fait déjà parti des tagActif
+ * @param {string} tag 
+ */
+function ajoutTagActif(tag){
+    if(!tagActif.includes(tag.toUpperCase())){
+        tagActif.push(tag.toUpperCase());
+        afficheTag();
+    }
+    console.log(tagActif);
+}
+
+ecouteRecherche();
+afficheCard(recipes);
+</code></pre>
         </article>
     </section>
 
@@ -82,13 +169,13 @@ afficheCard(recipes);</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#afficheCard">afficheCard</a></li><li><a href="global.html#recipes">recipes</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#afficheCard">afficheCard</a></li><li><a href="global.html#afficheTag">afficheTag</a></li><li><a href="global.html#ajoutRecetteRecherche">ajoutRecetteRecherche</a></li><li><a href="global.html#ajoutTagActif">ajoutTagActif</a></li><li><a href="global.html#ecouteRecherche">ecouteRecherche</a></li><li><a href="global.html#rechercheIngredients">rechercheIngredients</a></li><li><a href="global.html#rechercheTag">rechercheTag</a></li><li><a href="global.html#recipes">recipes</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Oct 14 2021 17:04:26 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 10 2021 11:20:40 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>
