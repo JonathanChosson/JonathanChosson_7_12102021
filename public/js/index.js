@@ -112,98 +112,84 @@ function ecouteRecherche(){
  * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
  */
 function rechercheTag(tableauRecherche){
-<<<<<<< HEAD
     for (let i = 0; i < tableauRecherche.length; i++) {
         if(tableauRecherche[i].length > 2){
-            rechercheTagCategorie(tableauRecherche[i]);
-=======
-    rechercheGlobal(tableauRecherche)
-    if(rechercheEnCours.length > 0){
-        afficheCard(rechercheEnCours);
-    }else{
-        for (let i = 0; i < tableauRecherche.length; i++) {
-            if(tableauRecherche[i].length > 2){
-                rechercheTagCategorie(tableauRecherche[i]);
-            }
->>>>>>> version1
+            rechercheTagCategorie(tableauRecherche[i], "ingredients");
+            rechercheTagCategorie(tableauRecherche[i], "appareil");
+            rechercheTagCategorie(tableauRecherche[i], "ustensiles");
         }
     }
-    
+    afficheCard(rechercheEnCours);
 }
 
 /**
  * Vérifie que le mot en entrée est présent dans ingrédients 
  * @param {string} tag 
  */
-function rechercheTagCategorie(tag){
+function rechercheTagCategorie(tag, categorie){
     if(tagActif.length <= 0){
         for (let i = 0; i < recipes.length; i++) {
-            for (let j = 0; j < recipes[i].ingredients.length; j++) {
-                if(recipes[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase())){
-                    ajoutRecetteRecherche(recipes[i]);
-                    ajoutTagActif(tag , 'i');
+            if(categorie === "ingredients"){
+                for (let j = 0; j < recipes[i].ingredients.length; j++) {
+                    if(recipes[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase())){
+                        ajoutRecetteRecherche(recipes[i]);
+                        ajoutTagActif(tag , 'i');
+                    }
                 }
             }
-            if(recipes[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase())){
-                ajoutRecetteRecherche(recipes[i]);
-                ajoutTagActif(tag , 'a');
-            }
-            for (let j = 0; j < recipes[i].ustensils.length; j++) {
-                if(recipes[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase())){
+            else if(categorie === "appareil"){
+                if(recipes[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase())){
                     ajoutRecetteRecherche(recipes[i]);
-                    ajoutTagActif(tag , 'u');
+                    ajoutTagActif(tag , 'a');
+                }
+            }else if(categorie === "ustensiles"){
+                for (let j = 0; j < recipes[i].ustensils.length; j++) {
+                    if(recipes[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase())){
+                        ajoutRecetteRecherche(recipes[i]);
+                        ajoutTagActif(tag , 'u');
+                    }
                 }
             }
         }
     }else{
         let tableauTemporaire = []
-        for (let i = 0; i < rechercheEnCours.length; i++) {
-            for (let j = 0; j < rechercheEnCours[i].ingredients.length; j++) {
-                if(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
-<<<<<<< HEAD
-                    tableauTemporaire.push(rechercheEnCours[i]);
-                    ajoutTagActif(tag , 'i');
+        if(categorie === "ingredients"){
+            for (let i = 0; i < rechercheEnCours.length; i++) {
+                for (let j = 0; j < rechercheEnCours[i].ingredients.length; j++) {
+                    if(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+                        console.log(rechercheEnCours[i]);
+                        tableauTemporaire.push(rechercheEnCours[i]);
+                        ajoutTagActif(tag , 'i');
+                    }
                 }
             }
-        };
-        for (let i = 0; i < rechercheEnCours.length; i++) {
-            if(rechercheEnCours[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
-                tableauTemporaire.push(rechercheEnCours[i]);
-                ajoutTagActif(tag , 'a');
-            }
-        };
-        for (let i = 0; i < rechercheEnCours.length; i++) {
-            for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
-                if(rechercheEnCours[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
-                    tableauTemporaire.push(rechercheEnCours[i]);
-                    ajoutTagActif(tag , 'u');
-                }
-            }
-        };
-=======
-                    console.log(rechercheEnCours[i]);
-                    tableauTemporaire.push(rechercheEnCours[i]);
-                    ajoutTagActif(tag , 'i');
-                }
+            if(tableauTemporaire.length > 0 ){
+                rechercheEnCours = tableauTemporaire;
             }
         }
-        for (let i = 0; i < rechercheEnCours.length; i++) {
-            if(rechercheEnCours[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
-                tableauTemporaire.push(rechercheEnCours[i]);
-                ajoutTagActif(tag , 'a');
-            }
-        }
-        for (let i = 0; i < rechercheEnCours.length; i++) {
-            for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
-                if(rechercheEnCours[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+        else if(categorie === "appareil"){
+            for (let i = 0; i < rechercheEnCours.length; i++) {
+                if(rechercheEnCours[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
                     tableauTemporaire.push(rechercheEnCours[i]);
-                    ajoutTagActif(tag , 'u');
+                    ajoutTagActif(tag , 'a');
                 }
             }
+            if(tableauTemporaire.length > 0 ){
+                rechercheEnCours = tableauTemporaire;
+            }
         }
->>>>>>> version1
-        if(tableauTemporaire.length > 0 ){
-            rechercheEnCours = tableauTemporaire;
+        else if(categorie === "ustensiles"){
+            for (let i = 0; i < rechercheEnCours.length; i++) {
+                for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
+                    if(rechercheEnCours[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+                        tableauTemporaire.push(rechercheEnCours[i]);
+                        ajoutTagActif(tag , 'u');
+                    }
+                }
+            }
+            if(tableauTemporaire.length > 0 ){
+                rechercheEnCours = tableauTemporaire;
+            }
         }
     }
 }
@@ -261,17 +247,6 @@ function fermetureTag(){
     }
 }
 
-function rechercheGlobal(tableauRecherche){
-    console.log(tableauRecherche);
-    for (let j = 0; j < tableauRecherche.length; j++) {
-        for (let i = 0; i < recipes.length; i++) {
-            console.log(recipes[i]);
-            if(recipes[i].name.toUpperCase().split(' ').includes(tableauRecherche[j].toUpperCase())){
-                ajoutRecetteRecherche(recipes[i]);
-            }
-        }
-    }
-    afficheCard(rechercheEnCours);
-}
+
 ecouteRecherche();
 afficheCard(recipes);
