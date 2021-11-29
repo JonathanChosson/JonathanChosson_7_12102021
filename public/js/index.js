@@ -9,6 +9,9 @@ let fermer = document.getElementsByClassName('fermer');
 //variables Globales
 let rechercheEnCours = [];
 let tagActif = [];
+let listeIngredients = document.querySelectorAll('.listeIngredients');
+let listeAppareils = document.querySelectorAll('.listeAppareils');
+let listeUstensiles = document.querySelectorAll('.listeUstensiles');
 
 /**
  * Génére et affiche une card par recette 
@@ -80,6 +83,7 @@ function afficheTag(){
     }
     champRecherche.parentNode.insertAdjacentElement('afterend',div);
     fermetureTag();
+    toggleAffichageTag();
 }
 
 /**
@@ -325,6 +329,7 @@ function afficheListeTag(){
         listeUstensiles[0].append(tag);
     };
     ecouteClicTag();
+    ecouteRechercheTag();
 }
 
 /**
@@ -334,9 +339,6 @@ function ouvreRechercheTag() {
     let tagIngredient = document.querySelectorAll('.btn-primary');
     let tagAppareil = document.querySelectorAll('.vert1');
     let tagUstensiles = document.querySelectorAll('.rouge1');
-    let listeIngredients = document.querySelectorAll('.listeIngredients');
-    let listeAppareils = document.querySelectorAll('.listeAppareils');
-    let listeUstensiles = document.querySelectorAll('.listeUstensiles');
     for (let i = 0; i < tagIngredient.length; i++) {
         tagIngredient[i].addEventListener('click', function(event){
             toggleAffichageTag(listeIngredients[0],event, listeAppareils[0], listeUstensiles[0]);
@@ -363,14 +365,18 @@ function ouvreRechercheTag() {
  * @param {object} categorieOff2 catégorie à masquer
  */
 function toggleAffichageTag(categorie, event, categorieOff1, categorieOff2){
-    if(categorie.style.display === "" || categorie.style.display === "none"){
+    if(!categorie){
+        listeAppareils[0].style.display = "none";
+        listeIngredients[0].style.display = "none";
+        listeUstensiles[0].style.display = "none";
+    }else if(categorie.style.display === "" || categorie.style.display === "none"){
         categorie.style.display = "flex";
         categorieOff1.style.display = "none";
         categorieOff2.style.display = "none";
     }else{
         categorie.style.display = "none"
     };
-    if(event.target.type === "text"){
+    if(event != undefined && event.target.type === "text"){
         event.target.value = "";
     };
 };
@@ -386,6 +392,21 @@ function ecouteClicTag(){
         })
     };
 };
+
+function ecouteRechercheTag(){
+    let champIngredients = document.getElementById('Ingredients');
+    let champAppareils = document.getElementById('Appareils');
+    let champUstensiles = document.getElementById('Ustensiles');
+    let champs = [champAppareils, champIngredients, champUstensiles];
+    for (let i = 0; i < champs.length; i++) {
+        champs[i].addEventListener('keypress', function(event){
+            if(event.key === "Enter" & champs[i].value.length > 2){
+                rechercheTagCategorie(event.target.value.toUpperCase());
+                event.target.value = "";
+            }
+        });
+    }
+}
 
 ecouteRecherche();
 ouvreRechercheTag();
