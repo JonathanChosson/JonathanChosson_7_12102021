@@ -30,3 +30,16 @@
         width: 100%;
     }
 }
+
+.listeIngredients{
+    color: white;
+    background-color: #007bff;
+    width: 600px;
+    display: none;
+    justify-content: space-around;
+    flex-flow: row wrap;
+}
+
+.btnTag{
+    width: 33%;
+}

@@ -52,12 +52,14 @@ function afficheCard(tableauEntree){
         card.append(cardBody);
         main.append(card);
     });
+    afficheListeTag();
 };
 
 /**
  * Affiche à l'utilisateur les tags actifs
  */
 function afficheTag(){
+    console.log(tagActif);
     let div = document.createElement('div');
     div.setAttribute('id', 'tagActif');
     if(document.getElementById('tagActif')){
@@ -85,6 +87,26 @@ function afficheTag(){
  * Ecoute la saisi sur le champ recherche
  */
 function ecouteRecherche(){
+    // bntRecherche[0].parentNode.setAttribute('disabled',"");
+    // champRecherche.addEventListener('click', function(event){
+    //     event.target.value = "";
+    // });
+    // champRecherche.addEventListener('input', function(event){
+    //     if(event.target.value.length > 2){
+    //         bntRecherche[0].parentNode.removeAttribute('disabled',"");
+    //     }
+    // });
+    // champRecherche.addEventListener('keypress', function(event){
+    //     if(event.key === "Enter" & champRecherche.value.length > 2){
+    //         rechercheTag(champRecherche.value.split(' '));
+    //         champRecherche.value ="";
+    //     }
+    // });
+    // bntRecherche[0].parentNode.addEventListener('click', function(){
+    //     rechercheTag(champRecherche.value.split(' '));
+    //     champRecherche.value ="";
+    //     // rechercheClassique(champRecherche.value);  A CODER PLUS TARD 
+    // });
     bntRecherche[0].parentNode.setAttribute('disabled',"");
     champRecherche.addEventListener('click', function(event){
         event.target.value = "";
@@ -96,16 +118,31 @@ function ecouteRecherche(){
     });
     champRecherche.addEventListener('keypress', function(event){
         if(event.key === "Enter" & champRecherche.value.length > 2){
-            rechercheTag(champRecherche.value.split(' '));
+            rechercheGlobal(champRecherche.value.split(' '));
             champRecherche.value ="";
         }
-    })
+    });
     bntRecherche[0].parentNode.addEventListener('click', function(){
-        rechercheTag(champRecherche.value.split(' '));
+        rechercheGlobal(champRecherche.value.split(' '));
         champRecherche.value ="";
-        // rechercheClassique(champRecherche.value);  A CODER PLUS TARD 
     });
 };
+
+/**
+ * Fonction qui recherche dans le titre et dans la description des recettes 
+ * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
+ */
+function rechercheGlobal(tableauRecherche){
+    rechercheEnCours = [];
+    for (let j = 0; j < tableauRecherche.length; j++) {
+        for (let i = 0; i < recipes.length; i++) {
+            if(recipes[i].name.toUpperCase().split(' ').includes(tableauRecherche[j].toUpperCase()) || recipes[i].description.toUpperCase().split(' ').includes(tableauRecherche[j].toUpperCase())){
+                ajoutRecetteRecherche(recipes[i]);
+            }
+        }
+    }
+    afficheCard(rechercheEnCours);
+}
 
 /**
  * fonction qui recherche pour chaque mot si c'est un tag ingredient
@@ -124,7 +161,7 @@ function rechercheTag(tableauRecherche){
  * Vérifie que le mot en entrée est présent dans ingrédients 
  * @param {string} tag 
  */
-function rechercheTagCategorie(tag, categorie){
+function rechercheTagCategorie(tag){
     if(tagActif.length <= 0){
         for (let i = 0; i < recipes.length; i++) {
             for (let j = 0; j < recipes[i].ingredients.length; j++) {
@@ -227,6 +264,33 @@ function fermetureTag(){
             afficheTag();
         })
     }
+}
+
+/**
+ * Affiche la liste des tags pour les 3 catégories
+ */
+function afficheListeTag(){
+    let listeIngredientsRecherche = [];
+    if(tagActif.length === 0){
+        for (let i = 0; i < recipes.length; i++) {
+            for (let j = 0; j < recipes[i].ingredients.length; j++) {
+                if(!listeIngredientsRecherche.includes(recipes[i].ingredients[j].ingredient)){
+                    listeIngredientsRecherche.push(recipes[i].ingredients[j].ingredient);
+                }
+            }
+        }
+    }
+    let listeIngredients = document.querySelectorAll('.listeIngredients');
+    
+    listeIngredients[0].innerHTML = '';
+    let p = document.createElement('p');
+    p.classList.add('btnTag');
+    for (let i = 0; i < listeIngredientsRecherche.length; i++) {
+        let tag =  p.cloneNode();
+        tag.setAttribute('id', listeIngredientsRecherche[i]);
+        tag.innerHTML = listeIngredientsRecherche[i];
+        listeIngredients[0].append(tag);
+    };
 }
 
 
