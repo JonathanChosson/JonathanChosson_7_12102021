@@ -88,3 +88,7 @@
     width: 30%;
     margin-left: 2px;
 }
+
+#Ingredients::placeholder, #Appareils::placeholder, #Ustensiles::placeholder{
+    color: white;
+}

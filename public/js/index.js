@@ -59,7 +59,6 @@ function afficheCard(tableauEntree){
  * Affiche à l'utilisateur les tags actifs
  */
 function afficheTag(){
-    console.log(tagActif);
     let div = document.createElement('div');
     div.setAttribute('id', 'tagActif');
     if(document.getElementById('tagActif')){
@@ -87,26 +86,6 @@ function afficheTag(){
  * Ecoute la saisi sur le champ recherche
  */
 function ecouteRecherche(){
-    // bntRecherche[0].parentNode.setAttribute('disabled',"");
-    // champRecherche.addEventListener('click', function(event){
-    //     event.target.value = "";
-    // });
-    // champRecherche.addEventListener('input', function(event){
-    //     if(event.target.value.length > 2){
-    //         bntRecherche[0].parentNode.removeAttribute('disabled',"");
-    //     }
-    // });
-    // champRecherche.addEventListener('keypress', function(event){
-    //     if(event.key === "Enter" & champRecherche.value.length > 2){
-    //         rechercheTag(champRecherche.value.split(' '));
-    //         champRecherche.value ="";
-    //     }
-    // });
-    // bntRecherche[0].parentNode.addEventListener('click', function(){
-    //     rechercheTag(champRecherche.value.split(' '));
-    //     champRecherche.value ="";
-    //     // rechercheClassique(champRecherche.value);  A CODER PLUS TARD 
-    // });
     bntRecherche[0].parentNode.setAttribute('disabled',"");
     champRecherche.addEventListener('click', function(event){
         event.target.value = "";
@@ -127,6 +106,21 @@ function ecouteRecherche(){
         champRecherche.value ="";
     });
 };
+
+/**
+ * fonction qui recherche pour chaque mot si c'est un tag ingredient
+ * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
+ */
+function rechercheTag(tableauRecherche){
+    rechercheEnCours = [];
+    for (let i = 0; i < tableauRecherche.length; i++) {
+        if(tableauRecherche[i].length > 2){
+            rechercheTagCategorie(tableauRecherche[i]);
+        }
+    }
+    afficheCard(rechercheEnCours);
+}
+
 
 /**
  * Fonction qui recherche dans le titre et dans la description des recettes 
@@ -152,17 +146,17 @@ function rechercheTagCategorie(tag){
     if(rechercheEnCours.length <= 0){
         for (let i = 0; i < recipes.length; i++) {
             for (let j = 0; j < recipes[i].ingredients.length; j++) {
-                if(recipes[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase())){
+                if(recipes[i].ingredients[j].ingredient.toUpperCase().includes(tag)){
                     ajoutRecetteRecherche(recipes[i]);
                     ajoutTagActif(tag , 'i');
                 }
             }
-            if(recipes[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase())){
+            if(recipes[i].appliance.toUpperCase().includes(tag)){
                 ajoutRecetteRecherche(recipes[i]);
                 ajoutTagActif(tag , 'a');
             }
             for (let j = 0; j < recipes[i].ustensils.length; j++) {
-                if(recipes[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase())){
+                if(recipes[i].ustensils[j].toUpperCase().includes(tag)){
                     ajoutRecetteRecherche(recipes[i]);
                     ajoutTagActif(tag , 'u');
                 }
@@ -172,22 +166,21 @@ function rechercheTagCategorie(tag){
         let tableauTemporaire = []
         for (let i = 0; i < rechercheEnCours.length; i++) {
             for (let j = 0; j < rechercheEnCours[i].ingredients.length; j++) {
-                if(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
-                    console.log(rechercheEnCours[i]);
+                if(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase().includes(tag) === true){
                     tableauTemporaire.push(rechercheEnCours[i]);
                     ajoutTagActif(tag , 'i');
                 }
             }
         }
         for (let i = 0; i < rechercheEnCours.length; i++) {
-            if(rechercheEnCours[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+            if(rechercheEnCours[i].appliance.toUpperCase().includes(tag) === true){
                 tableauTemporaire.push(rechercheEnCours[i]);
                 ajoutTagActif(tag , 'a');
             }
         }
         for (let i = 0; i < rechercheEnCours.length; i++) {
             for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
-                if(rechercheEnCours[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+                if(rechercheEnCours[i].ustensils[j].toUpperCase().includes(tag) === true){
                     tableauTemporaire.push(rechercheEnCours[i]);
                     ajoutTagActif(tag , 'u');
                 }
@@ -197,6 +190,7 @@ function rechercheTagCategorie(tag){
             rechercheEnCours = tableauTemporaire;
         }
     }
+    afficheCard(rechercheEnCours);
 }
 
 /**
@@ -381,10 +375,17 @@ function toggleAffichageTag(categorie, event, categorieOff1, categorieOff2){
     };
 };
 
+/**
+ * Ecoute le clic sur un tag 
+ */
 function ecouteClicTag(){
     let btnTag = document.querySelectorAll('.btnTag');
-    console.log(btnTag);
-}
+    for (let i = 0; i < btnTag.length; i++) {
+        btnTag[i].addEventListener('click', function(){
+            rechercheTagCategorie(btnTag[i].id.toUpperCase());
+        })
+    };
+};
 
 ecouteRecherche();
 ouvreRechercheTag();
