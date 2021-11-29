@@ -145,24 +145,11 @@ function rechercheGlobal(tableauRecherche){
 }
 
 /**
- * fonction qui recherche pour chaque mot si c'est un tag ingredient
- * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
- */
-function rechercheTag(tableauRecherche){
-    for (let i = 0; i < tableauRecherche.length; i++) {
-        if(tableauRecherche[i].length > 2){
-            rechercheTagCategorie(tableauRecherche[i]);
-        }
-    }
-    afficheCard(rechercheEnCours);
-}
-
-/**
  * Vérifie que le mot en entrée est présent dans ingrédients 
  * @param {string} tag 
  */
 function rechercheTagCategorie(tag){
-    if(tagActif.length <= 0){
+    if(rechercheEnCours.length <= 0){
         for (let i = 0; i < recipes.length; i++) {
             for (let j = 0; j < recipes[i].ingredients.length; j++) {
                 if(recipes[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase())){
@@ -271,18 +258,58 @@ function fermetureTag(){
  */
 function afficheListeTag(){
     let listeIngredientsRecherche = [];
-    if(tagActif.length === 0){
+    let listeAppareilsRecherche = [];
+    let listeUstensilesRecherche = [];
+    if(rechercheEnCours.length === 0){
         for (let i = 0; i < recipes.length; i++) {
             for (let j = 0; j < recipes[i].ingredients.length; j++) {
                 if(!listeIngredientsRecherche.includes(recipes[i].ingredients[j].ingredient)){
                     listeIngredientsRecherche.push(recipes[i].ingredients[j].ingredient);
                 }
             }
+        };
+        for (let i = 0; i < recipes.length; i++) {
+            if(!listeAppareilsRecherche.includes(recipes[i].appliance)){
+                listeAppareilsRecherche.push(recipes[i].appliance);
+            }
+        };
+        for (let i = 0; i < recipes.length; i++) {
+            for (let j = 0; j < recipes[i].ustensils.length; j++) {
+                if(!listeUstensilesRecherche.includes(recipes[i].ustensils[j])){
+                    listeUstensilesRecherche.push(recipes[i].ustensils[j]);
+                }
+            }
+        }
+    }else{
+        for (let i = 0; i < rechercheEnCours.length; i++) {
+            for (let j = 0; j < rechercheEnCours[i].ingredients.length; j++) {
+                if(!listeIngredientsRecherche.includes(rechercheEnCours[i].ingredients[j].ingredient)){
+                    listeIngredientsRecherche.push(rechercheEnCours[i].ingredients[j].ingredient);
+                }
+            }
+        };
+        for (let i = 0; i < rechercheEnCours.length; i++) {
+            if(!listeAppareilsRecherche.includes(rechercheEnCours[i].appliance)){
+                listeAppareilsRecherche.push(rechercheEnCours[i].appliance);
+            }
+        };
+        for (let i = 0; i < rechercheEnCours.length; i++) {
+            for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
+                if(!listeUstensilesRecherche.includes(rechercheEnCours[i].ustensils[j])){
+                    listeUstensilesRecherche.push(rechercheEnCours[i].ustensils[j]);
+                }
+            }
         }
     }
     let listeIngredients = document.querySelectorAll('.listeIngredients');
+    let listeAppareils = document.querySelectorAll('.listeAppareils');
+    let listeUstensiles = document.querySelectorAll('.listeUstensiles');
+
     
     listeIngredients[0].innerHTML = '';
+    listeAppareils[0].innerHTML = '';
+    listeUstensiles[0].innerHTML ='';
+
     let p = document.createElement('p');
     p.classList.add('btnTag');
     for (let i = 0; i < listeIngredientsRecherche.length; i++) {
@@ -291,8 +318,74 @@ function afficheListeTag(){
         tag.innerHTML = listeIngredientsRecherche[i];
         listeIngredients[0].append(tag);
     };
+    for (let i = 0; i < listeAppareilsRecherche.length; i++) {
+        let tag =  p.cloneNode();
+        tag.setAttribute('id', listeAppareilsRecherche[i]);
+        tag.innerHTML = listeAppareilsRecherche[i];
+        listeAppareils[0].append(tag);
+    };
+    for (let i = 0; i < listeUstensilesRecherche.length; i++) {
+        let tag =  p.cloneNode();
+        tag.setAttribute('id', listeUstensilesRecherche[i]);
+        tag.innerHTML = listeUstensilesRecherche[i];
+        listeUstensiles[0].append(tag);
+    };
+    ecouteClicTag();
 }
 
+/**
+ * Fonction qui gere l'ouverture des recherche par tag
+ */
+function ouvreRechercheTag() {
+    let tagIngredient = document.querySelectorAll('.btn-primary');
+    let tagAppareil = document.querySelectorAll('.vert1');
+    let tagUstensiles = document.querySelectorAll('.rouge1');
+    let listeIngredients = document.querySelectorAll('.listeIngredients');
+    let listeAppareils = document.querySelectorAll('.listeAppareils');
+    let listeUstensiles = document.querySelectorAll('.listeUstensiles');
+    for (let i = 0; i < tagIngredient.length; i++) {
+        tagIngredient[i].addEventListener('click', function(event){
+            toggleAffichageTag(listeIngredients[0],event, listeAppareils[0], listeUstensiles[0]);
+        })
+    };
+    for (let i = 0; i < tagAppareil.length; i++) {
+        tagAppareil[i].addEventListener('click', function(event){
+            toggleAffichageTag(listeAppareils[0],event, listeIngredients[0], listeUstensiles[0] );
+        });
+    };
+    for (let i = 0; i < tagUstensiles.length; i++) {
+        tagUstensiles[i].addEventListener('click', function(event){
+            toggleAffichageTag(listeUstensiles[0],event, listeIngredients[0], listeAppareils[0] );
+        });
+    };
+};
+
+
+/**
+ * Fonction qui toggle l'affichage ou non des tags
+ * @param {object} categorie categorie à afficher ou à masquer
+ * @param {object} event si champ texte on le vide
+ * @param {object} categorieOff1 catégorie à masquer
+ * @param {object} categorieOff2 catégorie à masquer
+ */
+function toggleAffichageTag(categorie, event, categorieOff1, categorieOff2){
+    if(categorie.style.display === "" || categorie.style.display === "none"){
+        categorie.style.display = "flex";
+        categorieOff1.style.display = "none";
+        categorieOff2.style.display = "none";
+    }else{
+        categorie.style.display = "none"
+    };
+    if(event.target.type === "text"){
+        event.target.value = "";
+    };
+};
+
+function ecouteClicTag(){
+    let btnTag = document.querySelectorAll('.btnTag');
+    console.log(btnTag);
+}
 
 ecouteRecherche();
+ouvreRechercheTag();
 afficheCard(recipes);

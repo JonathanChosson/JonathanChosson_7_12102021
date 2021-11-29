@@ -4,7 +4,18 @@
     background-color: #68D9A4 !important;
 }
 
+.vert1{
+    /* color: #68D9A4 !important; */
+    color: white !important;
+    background-color: #68D9A4 !important;
+}
+
 .rouge{
+    color: white !important;
+    background-color:#ED6454 !important;
+}
+
+.rouge1{
     color: white !important;
     background-color:#ED6454 !important;
 }
@@ -34,12 +45,46 @@
 .listeIngredients{
     color: white;
     background-color: #007bff;
-    width: 600px;
+    width: 150%;
     display: none;
     justify-content: space-around;
     flex-flow: row wrap;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+}
+
+.listeAppareils{
+    color: white;
+    background-color: #68D9A4;
+    width: 150%;
+    display: none;
+    justify-content: space-around;
+    flex-flow: row wrap;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+}
+
+.listeUstensiles{
+    color: white;
+    background-color: #ED6454;
+    width: 150%;
+    display: none;
+    justify-content: space-around;
+    flex-flow: row wrap;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
 }
 
 .btnTag{
-    width: 33%;
+    width: 30%;
+    margin-left: 2px;
 }

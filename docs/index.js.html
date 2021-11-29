@@ -32,6 +32,7 @@ console.log(recipes);
 let main = document.getElementById('main');
 let champRecherche = document.getElementById('champRecherche');
 let bntRecherche = document.getElementsByClassName('fa-search');
+let fermer = document.getElementsByClassName('fermer');
 
 //variables Globales
 let rechercheEnCours = [];
@@ -79,57 +80,162 @@ function afficheCard(tableauEntree){
         card.append(cardBody);
         main.append(card);
     });
+    afficheListeTag();
 };
 
 /**
  * Affiche à l'utilisateur les tags actifs
  */
 function afficheTag(){
+    console.log(tagActif);
     let div = document.createElement('div');
-    div.classList.add('mt2');
-    div.innerHTML ="TEST"
+    div.setAttribute('id', 'tagActif');
+    if(document.getElementById('tagActif')){
+        document.getElementById('tagActif').remove();
+    }
+    let span = document.createElement('span');
+    span.classList.add('badge', 'm-1');
+    for (let i = 0; i &lt; tagActif.length; i++) {
+        let spanActif = span.cloneNode();
+        if(tagActif[i].source === 'i'){
+            spanActif.classList.add('badge-primary');
+        }else if(tagActif[i].source === 'a'){
+            spanActif.classList.add('vert');
+        }else if(tagActif[i].source === 'u'){
+            spanActif.classList.add('rouge');
+        }
+        spanActif.innerHTML = tagActif[i].tag + ' ' + `&lt;i id="${tagActif[i].tag}" class="far fa-times-circle fermer">&lt;/i>`;
+        div.append(spanActif);    
+    }
     champRecherche.parentNode.insertAdjacentElement('afterend',div);
+    fermetureTag();
 }
 
 /**
  * Ecoute la saisi sur le champ recherche
  */
 function ecouteRecherche(){
+    // bntRecherche[0].parentNode.setAttribute('disabled',"");
+    // champRecherche.addEventListener('click', function(event){
+    //     event.target.value = "";
+    // });
+    // champRecherche.addEventListener('input', function(event){
+    //     if(event.target.value.length > 2){
+    //         bntRecherche[0].parentNode.removeAttribute('disabled',"");
+    //     }
+    // });
+    // champRecherche.addEventListener('keypress', function(event){
+    //     if(event.key === "Enter" &amp; champRecherche.value.length > 2){
+    //         rechercheTag(champRecherche.value.split(' '));
+    //         champRecherche.value ="";
+    //     }
+    // });
+    // bntRecherche[0].parentNode.addEventListener('click', function(){
+    //     rechercheTag(champRecherche.value.split(' '));
+    //     champRecherche.value ="";
+    //     // rechercheClassique(champRecherche.value);  A CODER PLUS TARD 
+    // });
     bntRecherche[0].parentNode.setAttribute('disabled',"");
+    champRecherche.addEventListener('click', function(event){
+        event.target.value = "";
+    });
     champRecherche.addEventListener('input', function(event){
         if(event.target.value.length > 2){
             bntRecherche[0].parentNode.removeAttribute('disabled',"");
         }
-    })
+    });
+    champRecherche.addEventListener('keypress', function(event){
+        if(event.key === "Enter" &amp; champRecherche.value.length > 2){
+            rechercheGlobal(champRecherche.value.split(' '));
+            champRecherche.value ="";
+        }
+    });
     bntRecherche[0].parentNode.addEventListener('click', function(){
-        rechercheTag(champRecherche.value.split(' '));
-        // rechercheClassique(champRecherche.value);  A CODER PLUS TARD 
-    })
+        rechercheGlobal(champRecherche.value.split(' '));
+        champRecherche.value ="";
+    });
 };
 
 /**
- * fonction qui recherche pour chaque mot si c'est un tag
+ * Fonction qui recherche dans le titre et dans la description des recettes 
+ * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
+ */
+function rechercheGlobal(tableauRecherche){
+    rechercheEnCours = [];
+    for (let j = 0; j &lt; tableauRecherche.length; j++) {
+        for (let i = 0; i &lt; recipes.length; i++) {
+            if(recipes[i].name.toUpperCase().split(' ').includes(tableauRecherche[j].toUpperCase()) || recipes[i].description.toUpperCase().split(' ').includes(tableauRecherche[j].toUpperCase())){
+                ajoutRecetteRecherche(recipes[i]);
+            }
+        }
+    }
+    afficheCard(rechercheEnCours);
+}
+
+/**
+ * fonction qui recherche pour chaque mot si c'est un tag ingredient
  * @param {array} tableauRecherche tableau fournis par {@link ecouteRecherche}
  */
 function rechercheTag(tableauRecherche){
     for (let i = 0; i &lt; tableauRecherche.length; i++) {
         if(tableauRecherche[i].length > 2){
-            rechercheIngredients(tableauRecherche[i]);
+            rechercheTagCategorie(tableauRecherche[i]);
         }
     }
+    afficheCard(rechercheEnCours);
 }
 
 /**
  * Vérifie que le mot en entrée est présent dans ingrédients 
  * @param {string} tag 
  */
-function rechercheIngredients(tag){
-    for (let i = 0; i &lt; recipes.length; i++) {
-        for (let j = 0; j &lt; recipes[i].ingredients.length; j++) {
-            if(recipes[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase())){
-                ajoutRecetteRecherche(recipes[i]);
-                ajoutTagActif(tag);
+function rechercheTagCategorie(tag){
+    if(tagActif.length &lt;= 0){
+        for (let i = 0; i &lt; recipes.length; i++) {
+            for (let j = 0; j &lt; recipes[i].ingredients.length; j++) {
+                if(recipes[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase())){
+                    ajoutRecetteRecherche(recipes[i]);
+                    ajoutTagActif(tag , 'i');
+                }
             }
+            if(recipes[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase())){
+                ajoutRecetteRecherche(recipes[i]);
+                ajoutTagActif(tag , 'a');
+            }
+            for (let j = 0; j &lt; recipes[i].ustensils.length; j++) {
+                if(recipes[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase())){
+                    ajoutRecetteRecherche(recipes[i]);
+                    ajoutTagActif(tag , 'u');
+                }
+            }
+        }
+    }else{
+        let tableauTemporaire = []
+        for (let i = 0; i &lt; rechercheEnCours.length; i++) {
+            for (let j = 0; j &lt; rechercheEnCours[i].ingredients.length; j++) {
+                if(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+                    console.log(rechercheEnCours[i]);
+                    tableauTemporaire.push(rechercheEnCours[i]);
+                    ajoutTagActif(tag , 'i');
+                }
+            }
+        }
+        for (let i = 0; i &lt; rechercheEnCours.length; i++) {
+            if(rechercheEnCours[i].appliance.toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+                tableauTemporaire.push(rechercheEnCours[i]);
+                ajoutTagActif(tag , 'a');
+            }
+        }
+        for (let i = 0; i &lt; rechercheEnCours.length; i++) {
+            for (let j = 0; j &lt; rechercheEnCours[i].ustensils.length; j++) {
+                if(rechercheEnCours[i].ustensils[j].toUpperCase().split(' ').includes(tag.toUpperCase()) === true){
+                    tableauTemporaire.push(rechercheEnCours[i]);
+                    ajoutTagActif(tag , 'u');
+                }
+            }
+        }
+        if(tableauTemporaire.length > 0 ){
+            rechercheEnCours = tableauTemporaire;
         }
     }
 }
@@ -142,22 +248,182 @@ function ajoutRecetteRecherche(recette){
     if(!rechercheEnCours.includes(recette)){
         rechercheEnCours.push(recette);
     }
-    afficheCard(rechercheEnCours);
 }
 
 /**
  * Vérifie si le tag fait déjà parti des tagActif
  * @param {string} tag 
  */
-function ajoutTagActif(tag){
-    if(!tagActif.includes(tag.toUpperCase())){
-        tagActif.push(tag.toUpperCase());
-        afficheTag();
+function ajoutTagActif(tag, source){
+    let tagAjout = {
+        tag : tag.toUpperCase(),
+        source
     }
-    console.log(tagActif);
+    let estActif = 0; 
+    for (let i = 0; i &lt; tagActif.length; i++) {
+        if(tagActif[i].tag === tagAjout.tag){
+            estActif ++;
+        }
+    }
+    if(estActif &lt; 1){
+        tagActif.push(tagAjout);
+    }
+    afficheTag();
 }
 
+/**
+ * Ecoute le clic sur le bouton fermer d'un tag 
+ */
+function fermetureTag(){
+    for (let i = 0; i &lt; fermer.length; i++) {
+        fermer[i].addEventListener('click', function(){
+            let tableauTag = [];
+            for (let i = 0; i &lt; tagActif.length; i++) {
+                tableauTag.push(tagActif[i].tag);
+            }
+            tableauTag.splice(tableauTag.indexOf(fermer[i].id), 1);
+            tagActif = [];
+            if(tableauTag.length >0){
+                rechercheTag(tableauTag);
+            }else{
+                rechercheEnCours = [];
+                afficheCard(recipes);
+            }
+            afficheTag();
+        })
+    }
+}
+
+/**
+ * Affiche la liste des tags pour les 3 catégories
+ */
+function afficheListeTag(){
+    let listeIngredientsRecherche = [];
+    let listeAppareilsRecherche = [];
+    let listeUstensilesRecherche = [];
+    if(rechercheEnCours.length === 0){
+        for (let i = 0; i &lt; recipes.length; i++) {
+            for (let j = 0; j &lt; recipes[i].ingredients.length; j++) {
+                if(!listeIngredientsRecherche.includes(recipes[i].ingredients[j].ingredient)){
+                    listeIngredientsRecherche.push(recipes[i].ingredients[j].ingredient);
+                }
+            }
+        };
+        for (let i = 0; i &lt; recipes.length; i++) {
+            if(!listeAppareilsRecherche.includes(recipes[i].appliance)){
+                listeAppareilsRecherche.push(recipes[i].appliance);
+            }
+        };
+        for (let i = 0; i &lt; recipes.length; i++) {
+            for (let j = 0; j &lt; recipes[i].ustensils.length; j++) {
+                if(!listeUstensilesRecherche.includes(recipes[i].ustensils[j])){
+                    listeUstensilesRecherche.push(recipes[i].ustensils[j]);
+                }
+            }
+        }
+    }else{
+        for (let i = 0; i &lt; rechercheEnCours.length; i++) {
+            for (let j = 0; j &lt; rechercheEnCours[i].ingredients.length; j++) {
+                if(!listeIngredientsRecherche.includes(rechercheEnCours[i].ingredients[j].ingredient)){
+                    listeIngredientsRecherche.push(rechercheEnCours[i].ingredients[j].ingredient);
+                }
+            }
+        };
+        for (let i = 0; i &lt; rechercheEnCours.length; i++) {
+            if(!listeAppareilsRecherche.includes(rechercheEnCours[i].appliance)){
+                listeAppareilsRecherche.push(rechercheEnCours[i].appliance);
+            }
+        };
+        for (let i = 0; i &lt; rechercheEnCours.length; i++) {
+            for (let j = 0; j &lt; rechercheEnCours[i].ustensils.length; j++) {
+                console.log(rechercheEnCours[i].ustensils[j]);
+                if(!listeUstensilesRecherche.includes(rechercheEnCours[i].ustensils[j])){
+                    listeUstensilesRecherche.push(rechercheEnCours[i].ustensils[j]);
+                }
+            }
+        }
+    }
+    let listeIngredients = document.querySelectorAll('.listeIngredients');
+    let listeAppareils = document.querySelectorAll('.listeAppareils');
+    let listeUstensiles = document.querySelectorAll('.listeUstensiles');
+
+    
+    listeIngredients[0].innerHTML = '';
+    listeAppareils[0].innerHTML = '';
+    listeUstensiles[0].innerHTML ='';
+
+    let p = document.createElement('p');
+    p.classList.add('btnTag');
+    for (let i = 0; i &lt; listeIngredientsRecherche.length; i++) {
+        let tag =  p.cloneNode();
+        tag.setAttribute('id', listeIngredientsRecherche[i]);
+        tag.innerHTML = listeIngredientsRecherche[i];
+        listeIngredients[0].append(tag);
+    };
+    for (let i = 0; i &lt; listeAppareilsRecherche.length; i++) {
+        let tag =  p.cloneNode();
+        tag.setAttribute('id', listeAppareilsRecherche[i]);
+        tag.innerHTML = listeAppareilsRecherche[i];
+        listeAppareils[0].append(tag);
+    };
+    for (let i = 0; i &lt; listeUstensilesRecherche.length; i++) {
+        let tag =  p.cloneNode();
+        tag.setAttribute('id', listeUstensilesRecherche[i]);
+        tag.innerHTML = listeUstensilesRecherche[i];
+        listeUstensiles[0].append(tag);
+    };
+}
+
+/**
+ * Fonction qui gere l'ouverture des recherche par tag
+ */
+function ouvreRechercheTag() {
+    let tagIngredient = document.querySelectorAll('.btn-primary');
+    let tagAppareil = document.querySelectorAll('.vert1');
+    let tagUstensiles = document.querySelectorAll('.rouge1');
+    let listeIngredients = document.querySelectorAll('.listeIngredients');
+    let listeAppareils = document.querySelectorAll('.listeAppareils');
+    let listeUstensiles = document.querySelectorAll('.listeUstensiles');
+    for (let i = 0; i &lt; tagIngredient.length; i++) {
+        tagIngredient[i].addEventListener('click', function(event){
+            toggleAffichageTag(listeIngredients[0],event, listeAppareils[0], listeUstensiles[0]);
+        })
+    };
+    for (let i = 0; i &lt; tagAppareil.length; i++) {
+        tagAppareil[i].addEventListener('click', function(event){
+            toggleAffichageTag(listeAppareils[0],event, listeIngredients[0], listeUstensiles[0] );
+        });
+    };
+    for (let i = 0; i &lt; tagUstensiles.length; i++) {
+        tagUstensiles[i].addEventListener('click', function(event){
+            toggleAffichageTag(listeUstensiles[0],event, listeIngredients[0], listeAppareils[0] );
+        });
+    };
+};
+
+
+/**
+ * Fonction qui toggle l'affichage ou non des tags
+ * @param {object} categorie categorie à afficher ou à masquer
+ * @param {object} event si champ texte on le vide
+ * @param {object} categorieOff1 catégorie à masquer
+ * @param {object} categorieOff2 catégorie à masquer
+ */
+function toggleAffichageTag(categorie, event, categorieOff1, categorieOff2){
+    if(categorie.style.display === "" || categorie.style.display === "none"){
+        categorie.style.display = "flex";
+        categorieOff1.style.display = "none";
+        categorieOff2.style.display = "none";
+    }else{
+        categorie.style.display = "none"
+    };
+    if(event.target.type === "text"){
+        event.target.value = "";
+    };
+};
+
 ecouteRecherche();
+ouvreRechercheTag()
 afficheCard(recipes);
 </code></pre>
         </article>
@@ -169,13 +435,13 @@ afficheCard(recipes);
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#afficheCard">afficheCard</a></li><li><a href="global.html#afficheTag">afficheTag</a></li><li><a href="global.html#ajoutRecetteRecherche">ajoutRecetteRecherche</a></li><li><a href="global.html#ajoutTagActif">ajoutTagActif</a></li><li><a href="global.html#ecouteRecherche">ecouteRecherche</a></li><li><a href="global.html#rechercheIngredients">rechercheIngredients</a></li><li><a href="global.html#rechercheTag">rechercheTag</a></li><li><a href="global.html#recipes">recipes</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#afficheCard">afficheCard</a></li><li><a href="global.html#afficheListeTag">afficheListeTag</a></li><li><a href="global.html#afficheTag">afficheTag</a></li><li><a href="global.html#ajoutRecetteRecherche">ajoutRecetteRecherche</a></li><li><a href="global.html#ajoutTagActif">ajoutTagActif</a></li><li><a href="global.html#ecouteRecherche">ecouteRecherche</a></li><li><a href="global.html#fermetureTag">fermetureTag</a></li><li><a href="global.html#ouvreRechercheTag">ouvreRechercheTag</a></li><li><a href="global.html#rechercheGlobal">rechercheGlobal</a></li><li><a href="global.html#rechercheTag">rechercheTag</a></li><li><a href="global.html#rechercheTagCategorie">rechercheTagCategorie</a></li><li><a href="global.html#recipes">recipes</a></li><li><a href="global.html#toggleAffichageTag">toggleAffichageTag</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 10 2021 11:20:40 GMT+0100 (heure normale d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 15:02:44 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>
