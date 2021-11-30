@@ -20,6 +20,9 @@ let listeUstensiles = document.querySelectorAll('.listeUstensiles');
 function afficheCard(tableauEntree){
     main.innerHTML =``;
     let div = document.createElement('div');
+    if(tableauEntree.length === 0){
+        main.innerHTML = `<p class='h1 text-center'>Votre recherche ne renvoie aucun résultat`;
+    }
     tableauEntree.forEach(recette => {
         // console.log(recette);
         let card = div.cloneNode(true);
