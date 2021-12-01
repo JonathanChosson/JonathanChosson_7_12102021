@@ -87,6 +87,7 @@
 .btnTag{
     width: 30%;
     margin-left: 2px;
+    cursor: pointer;
 }
 
 #Ingredients::placeholder, #Appareils::placeholder, #Ustensiles::placeholder{
