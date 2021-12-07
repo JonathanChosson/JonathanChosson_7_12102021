@@ -27,7 +27,7 @@ function afficheCard(tableauEntree){
         let card = div.cloneNode(true);
         card.classList.add('card','mb-2','cardPerso');
         // card.setAttribute('style', 'width:33%');
-        card.innerHTML = `<img src="./images/recettes-de-cuisine-en-video.jpg" class="card-img-top" alt="Image de la recette">`;
+        card.innerHTML = `<img src="./public/images/recettes-de-cuisine-en-video.jpg" class="card-img-top" alt="Image de la recette">`;
         let cardBody = div.cloneNode(true);
         cardBody.classList.add('card-body','bg-light');
         let divTitre = div.cloneNode(true);
