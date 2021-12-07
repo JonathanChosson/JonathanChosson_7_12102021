@@ -24,7 +24,6 @@ function afficheCard(tableauEntree){
         main.innerHTML = `<p class='h1 text-center'>Votre recherche ne renvoie aucun résultat`;
     }
     tableauEntree.forEach(recette => {
-        // console.log(recette);
         let card = div.cloneNode(true);
         card.classList.add('card','mb-2','cardPerso');
         // card.setAttribute('style', 'width:33%');
@@ -407,3 +406,12 @@ function ecouteRechercheTag(){
 ecouteRecherche();
 ouvreRechercheTag();
 afficheCard(recipes);
+
+/**
+ * Verifie ou l'on click afin de basculer au besoin l'affichage des tags
+ */
+document.addEventListener('click', function(event){
+    if(!event.target.classList.contains('bg-primary') && !event.target.classList.contains('btn-primary') && !event.target.classList.contains('vert') && !event.target.classList.contains('vert1') && !event.target.classList.contains('rouge') && !event.target.classList.contains('rouge1')){
+        toggleAffichageTag();
+    }
+})
