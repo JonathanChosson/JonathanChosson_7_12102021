@@ -2,12 +2,12 @@
 ## Choix de la version du projet 
 <ul>
     <li>Version 1 : version utilisant les boucles native en javascript </li>
-    <li>Version 2 : version utilisant la programation fonctionelle avec les méthodes de l'objet array</li>
+    <li>Version 2 : version utilisant la programmation fonctionelle avec les méthodes de l'objet array</li>
 </ul>
 Chaque version est sur une branche différente 
 
 ## VERSION Choisi
-Vous êtes ici sur la version que j'ai choisi utilisant la programation fonctionelle avec les méthodes de l'objet array
+Vous êtes ici sur la version que j'ai choisi utilisant la programmation fonctionelle avec les méthodes de l'objet array
 ## Explication du TP
 ### Créer un algorithme de recherche
 Objectif créer un algorithme de recherche :  
