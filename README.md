@@ -1,6 +1,6 @@
 # Projet Les petits plats
 ## VERSION 2
-Vous êtes ici sur la version utilisant la programation fonctionelle avec les méthodes de l'objet array
+Vous êtes ici sur la version utilisant la programmation fonctionelle avec les méthodes de l'objet array
 ## Explication du TP
 ### Créer un algorithme de recherche
 Objectif créer un algorithme de recherche :  
