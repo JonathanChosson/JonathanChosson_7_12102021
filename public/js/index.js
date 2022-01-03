@@ -58,6 +58,7 @@ function afficheCard(tableauEntree){
         main.append(card);
     });
     afficheListeTag();
+    ecouteRecherche()
 };
 
 /**
