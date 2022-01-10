@@ -261,32 +261,32 @@ function afficheListeTag(){
     if(rechercheEnCours.length === 0){
         recipes.forEach(recette => {
             recette.ingredients.forEach(ingredient => {
-                if(!listeIngredientsRecherche.includes(ingredient.ingredient)){
-                    listeIngredientsRecherche.push(ingredient.ingredient);
+                if(!listeIngredientsRecherche.includes(ingredient.ingredient.toUpperCase())){
+                    listeIngredientsRecherche.push(ingredient.ingredient.toUpperCase());
                 }
             });
-            if(!listeAppareilsRecherche.includes(recette.appliance)){
-                listeAppareilsRecherche.push(recette.appliance);
+            if(!listeAppareilsRecherche.includes(recette.appliance.toUpperCase())){
+                listeAppareilsRecherche.push(recette.appliance.toUpperCase());
             };
             recette.ustensils.forEach(ustensil => {
-                if(!listeUstensilesRecherche.includes(ustensil)){
-                    listeUstensilesRecherche.push(ustensil);
+                if(!listeUstensilesRecherche.includes(ustensil.toUpperCase())){
+                    listeUstensilesRecherche.push(ustensil.toUpperCase());
                 }
             });
         });
     }else{
         rechercheEnCours.forEach(recetteEnCours => {
             recetteEnCours.ingredients.forEach(ingredient => {
-                if(!listeIngredientsRecherche.includes(ingredient.ingredient)){
-                    listeIngredientsRecherche.push(ingredient.ingredient);
+                if(!listeIngredientsRecherche.includes(ingredient.ingredient.toUpperCase())){
+                    listeIngredientsRecherche.push(ingredient.ingredient.toUpperCase());
                 }
             });
-            if(!listeAppareilsRecherche.includes(recetteEnCours.appliance)){
-                listeAppareilsRecherche.push(recetteEnCours.appliance);
+            if(!listeAppareilsRecherche.includes(recetteEnCours.appliance.toUpperCase())){
+                listeAppareilsRecherche.push(recetteEnCours.appliance.toUpperCase());
             };
             recetteEnCours.ustensils.forEach(ustensil => {
-                if(!listeUstensilesRecherche.includes(ustensil)){
-                    listeUstensilesRecherche.push(ustensil);
+                if(!listeUstensilesRecherche.includes(ustensil.toUpperCase())){
+                    listeUstensilesRecherche.push(ustensil.toUpperCase());
                 }
             });
         });
