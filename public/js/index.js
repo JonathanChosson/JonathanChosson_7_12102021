@@ -150,7 +150,7 @@ function rechercheGlobal(tableauRecherche){
  * @param {string} tag 
  */
  function rechercheTagCategorie(tag){
-    let tableauTemporaire = []
+    let tableauTemporaire = [];
     if(rechercheEnCours.length <= 0){
         recipes.forEach(recette => {
             recette.ingredients.forEach(ingredient => {
@@ -386,11 +386,62 @@ function ecouteClicTag(){
     let btnTag = document.querySelectorAll('.btnTag');
     btnTag.forEach(btn => {
         btn.addEventListener('click', function(){
-            rechercheTagCategorie(btn.id.toUpperCase());
+            clicTagCategorie(btn.id.toUpperCase());
         })
     });
 };
 
+/**
+ * Vérifie que le mot en entrée est présent dans ingrédients 
+ * @param {string} tag 
+ */
+function clicTagCategorie(tag){
+    if(rechercheEnCours.length <= 0){
+        recipes.forEach(recette => {
+            recette.ingredients.forEach(ingredient => {
+                if(ingredient.ingredient.toUpperCase().includes(tag)){
+                    ajoutRecetteRecherche(recette);
+                    ajoutTagActif(tag , 'i');
+                }
+            });
+            if(recette.appliance.toUpperCase().includes(tag)){
+                ajoutRecetteRecherche(recette);
+                ajoutTagActif(tag , 'a');
+            };
+            recette.ustensils.forEach(ustensil => {
+                if(ustensil.toUpperCase().includes(tag)){
+                    ajoutRecetteRecherche(recette);
+                    ajoutTagActif(tag , 'u');
+                }
+            });
+        });
+
+    }else{
+        let tableauTemporaire = []
+        rechercheEnCours.forEach(recetteEnCours => {
+            recetteEnCours.ingredients.forEach(ingredient => {
+                if(ingredient.ingredient.toUpperCase().includes(tag) === true){
+                    tableauTemporaire.push(recetteEnCours);
+                    ajoutTagActif(tag , 'i');
+                }
+            });
+            if(recetteEnCours.appliance.toUpperCase().includes(tag) === true){
+                tableauTemporaire.push(recetteEnCours);
+                ajoutTagActif(tag , 'a');
+            };
+            recetteEnCours.ustensils.forEach(ustensil => {
+                if(ustensil.toUpperCase().includes(tag) === true){
+                    tableauTemporaire.push(recetteEnCours);
+                    ajoutTagActif(tag , 'u');
+                }
+            });
+        });
+        if(tableauTemporaire.length > 0 ){
+            rechercheEnCours = tableauTemporaire;
+        }
+    }
+    afficheCard(rechercheEnCours);
+}
 
 /**
  * Ecoute la saisie dans les champs de tag 
