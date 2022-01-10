@@ -123,7 +123,7 @@ function rechercheTag(tableauRecherche){
     rechercheEnCours = [];
     for (let i = 0; i < tableauRecherche.length; i++) {
         if(tableauRecherche[i].length > 2){
-            rechercheTagCategorie(tableauRecherche[i]);
+            clicTagCategorie(tableauRecherche[i]);
         }
     }
     afficheCard(rechercheEnCours);
@@ -155,19 +155,24 @@ function rechercheTagCategorie(tag){
     if(rechercheEnCours.length <= 0){
         for (let i = 0; i < recipes.length; i++) {
             for (let j = 0; j < recipes[i].ingredients.length; j++) {
-                console.log(recipes[i].ingredients[j].ingredient.toUpperCase().split(' '));
                 if(recipes[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag)){
-                    tableauTemporaire.push(recipes[i]);
+                    if(!tableauTemporaire.includes(recipes[i])){
+                        tableauTemporaire.push(recipes[i]);
+                    }
                     ajoutTagActif(tag , 'i');
                 }
             }
             if(recipes[i].appliance.toUpperCase().split(' ').includes(tag)){
-                tableauTemporaire.push(recipes[i]);
+                if(!tableauTemporaire.includes(recipes[i])){
+                    tableauTemporaire.push(recipes[i]);
+                }
                 ajoutTagActif(tag , 'a');
             }
             for (let j = 0; j < recipes[i].ustensils.length; j++) {
                 if(recipes[i].ustensils[j].toUpperCase().split(' ').includes(tag)){
-                    tableauTemporaire.push(recipes[i]);
+                    if(!tableauTemporaire.includes(recipes[i])){
+                        tableauTemporaire.push(recipes[i]);
+                    }
                     ajoutTagActif(tag , 'u');
                 }
             }
@@ -182,21 +187,27 @@ function rechercheTagCategorie(tag){
         for (let i = 0; i < rechercheEnCours.length; i++) {
             for (let j = 0; j < rechercheEnCours[i].ingredients.length; j++) {
                 if(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase().split(' ').includes(tag)){
-                    tableauTemporaire.push(rechercheEnCours[i]);
+                    if(!tableauTemporaire.includes(rechercheEnCours[i])){
+                        tableauTemporaire.push(rechercheEnCours[i]);
+                    }
                     ajoutTagActif(tag , 'i');
                 }
             }
         }
         for (let i = 0; i < rechercheEnCours.length; i++) {
             if(rechercheEnCours[i].appliance.toUpperCase().split(' ').includes(tag)){
-                tableauTemporaire.push(rechercheEnCours[i]);
+                if(!tableauTemporaire.includes(rechercheEnCours[i])){
+                    tableauTemporaire.push(rechercheEnCours[i]);
+                }
                 ajoutTagActif(tag , 'a');
             }
         }
         for (let i = 0; i < rechercheEnCours.length; i++) {
             for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
                 if(rechercheEnCours[i].ustensils[j].toUpperCase().split(' ').includes(tag)){
-                    tableauTemporaire.push(rechercheEnCours[i]);
+                    if(!tableauTemporaire.includes(rechercheEnCours[i])){
+                        tableauTemporaire.push(rechercheEnCours[i]);
+                    }
                     ajoutTagActif(tag , 'u');
                 }
             }
@@ -399,10 +410,65 @@ function ecouteClicTag(){
     let btnTag = document.querySelectorAll('.btnTag');
     for (let i = 0; i < btnTag.length; i++) {
         btnTag[i].addEventListener('click', function(){
-            rechercheTagCategorie(btnTag[i].id.toUpperCase());
+            clicTagCategorie(btnTag[i].id.toUpperCase());
         })
     };
 };
+
+/**
+ * Vérifie que le mot en entrée est présent dans ingrédients 
+ * @param {string} tag 
+ */
+function clicTagCategorie(tag){
+    if(rechercheEnCours.length <= 0){
+        for (let i = 0; i < recipes.length; i++) {
+            for (let j = 0; j < recipes[i].ingredients.length; j++) {
+                if(recipes[i].ingredients[j].ingredient.toUpperCase().includes(tag)){
+                    ajoutRecetteRecherche(recipes[i]);
+                    ajoutTagActif(tag , 'i');
+                }
+            }
+            if(recipes[i].appliance.toUpperCase().includes(tag)){
+                ajoutRecetteRecherche(recipes[i]);
+                ajoutTagActif(tag , 'a');
+            }
+            for (let j = 0; j < recipes[i].ustensils.length; j++) {
+                if(recipes[i].ustensils[j].toUpperCase().includes(tag)){
+                    ajoutRecetteRecherche(recipes[i]);
+                    ajoutTagActif(tag , 'u');
+                }
+            }
+        }
+    }else{
+        let tableauTemporaire = []
+        for (let i = 0; i < rechercheEnCours.length; i++) {
+            for (let j = 0; j < rechercheEnCours[i].ingredients.length; j++) {
+                if(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase().includes(tag) === true){
+                    tableauTemporaire.push(rechercheEnCours[i]);
+                    ajoutTagActif(tag , 'i');
+                }
+            }
+        }
+        for (let i = 0; i < rechercheEnCours.length; i++) {
+            if(rechercheEnCours[i].appliance.toUpperCase().includes(tag) === true){
+                tableauTemporaire.push(rechercheEnCours[i]);
+                ajoutTagActif(tag , 'a');
+            }
+        }
+        for (let i = 0; i < rechercheEnCours.length; i++) {
+            for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
+                if(rechercheEnCours[i].ustensils[j].toUpperCase().includes(tag) === true){
+                    tableauTemporaire.push(rechercheEnCours[i]);
+                    ajoutTagActif(tag , 'u');
+                }
+            }
+        }
+        if(tableauTemporaire.length > 0 ){
+            rechercheEnCours = tableauTemporaire;
+        }
+    }
+    afficheCard(rechercheEnCours);
+}
 
 function ecouteRechercheTag(){
     let champIngredients = document.getElementById('Ingredients');
