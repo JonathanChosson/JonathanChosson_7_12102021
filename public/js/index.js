@@ -1,17 +1,17 @@
 import { recipes } from "./recipes.js";
 console.log(recipes);
 //Eléments du DOM
-let main = document.getElementById('main');
-let champRecherche = document.getElementById('champRecherche');
-let bntRecherche = document.getElementsByClassName('fa-search');
-let fermer = document.getElementsByClassName('fermer');
+const main = document.getElementById('main');
+const champRecherche = document.getElementById('champRecherche');
+const bntRecherche = document.getElementsByClassName('fa-search');
+const fermer = document.getElementsByClassName('fermer');
 
 //variables Globales
 let rechercheEnCours = [];
 let tagActif = [];
-let listeIngredients = document.querySelectorAll('.listeIngredients');
-let listeAppareils = document.querySelectorAll('.listeAppareils');
-let listeUstensiles = document.querySelectorAll('.listeUstensiles');
+const listeIngredients = document.querySelectorAll('.listeIngredients');
+const listeAppareils = document.querySelectorAll('.listeAppareils');
+const listeUstensiles = document.querySelectorAll('.listeUstensiles');
 
 /**
  * Génére et affiche une card par recette 
@@ -19,36 +19,36 @@ let listeUstensiles = document.querySelectorAll('.listeUstensiles');
  */
 function afficheCard(tableauEntree){
     main.innerHTML =``;
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     if(tableauEntree.length === 0){
         main.innerHTML = `<p class='h1 text-center'>Votre recherche ne renvoie aucun résultat`;
     }
     tableauEntree.forEach(recette => {
         // console.log(recette);
-        let card = div.cloneNode(true);
+        const card = div.cloneNode(true);
         card.classList.add('card','mb-2','cardPerso');
         // card.setAttribute('style', 'width:33%');
         card.innerHTML = `<img src="./public/images/recettes-de-cuisine-en-video.jpg" class="card-img-top" alt="Image de la recette">`;
-        let cardBody = div.cloneNode(true);
+        const cardBody = div.cloneNode(true);
         cardBody.classList.add('card-body','bg-light');
-        let divTitre = div.cloneNode(true);
+        const divTitre = div.cloneNode(true);
         divTitre.classList.add('d-flex','justify-content-between');
         divTitre.innerHTML =`
             <h5 class="card-title h6 col 5">${recette.name}</h5>
             <p class="font-weight-bold"><i class="far fa-clock"></i> ${recette.time} min</p>
         `;
-        let divRecette = div.cloneNode(true);
+        const divRecette = div.cloneNode(true);
         divRecette.classList.add('d-flex', 'justify-content-center');
-        let divIngredients = div.cloneNode(true);
+        const divIngredients = div.cloneNode(true);
         divIngredients.classList.add('d-flex', 'flex-column');
         recette.ingredients.forEach(ingredient => {
-            let span = document.createElement('small');
-            let quantite = ingredient.quantity === undefined ? '' : `: ${ingredient.quantity}`;
-            let unite = ingredient.unit === undefined ? '' : ingredient.unit;
+            const span = document.createElement('small');
+            const quantite = ingredient.quantity === undefined ? '' : `: ${ingredient.quantity}`;
+            const unite = ingredient.unit === undefined ? '' : ingredient.unit;
             span.innerHTML = `<span>${ingredient.ingredient} ${quantite} ${unite}</span>`;
             divIngredients.append(span)
         });
-        let divDescription = div.cloneNode(true);
+        const divDescription = div.cloneNode(true);
         divDescription.classList.add('col-6','ellipsisDesc');
         divDescription.innerHTML = `<p>${recette.description}</p>`;
         divRecette.append(divIngredients);
@@ -66,15 +66,15 @@ function afficheCard(tableauEntree){
  * Affiche à l'utilisateur les tags actifs
  */
 function afficheTag(){
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     div.setAttribute('id', 'tagActif');
     if(document.getElementById('tagActif')){
         document.getElementById('tagActif').remove();
     }
-    let span = document.createElement('span');
+    const span = document.createElement('span');
     span.classList.add('badge', 'm-1');
     for (let i = 0; i < tagActif.length; i++) {
-        let spanActif = span.cloneNode();
+        const spanActif = span.cloneNode();
         if(tagActif[i].source === 'i'){
             spanActif.classList.add('badge-primary');
         }else if(tagActif[i].source === 'a'){
@@ -321,16 +321,16 @@ function afficheListeTag(){
             }
         }
     }
-    let listeIngredients = document.querySelectorAll('.listeIngredients');
-    let listeAppareils = document.querySelectorAll('.listeAppareils');
-    let listeUstensiles = document.querySelectorAll('.listeUstensiles');
+    const listeIngredients = document.querySelectorAll('.listeIngredients');
+    const listeAppareils = document.querySelectorAll('.listeAppareils');
+    const listeUstensiles = document.querySelectorAll('.listeUstensiles');
 
     
     listeIngredients[0].innerHTML = '';
     listeAppareils[0].innerHTML = '';
     listeUstensiles[0].innerHTML ='';
 
-    let p = document.createElement('p');
+    const p = document.createElement('p');
     p.classList.add('btnTag');
     for (let i = 0; i < listeIngredientsRecherche.length; i++) {
         let tag =  p.cloneNode();
@@ -339,13 +339,13 @@ function afficheListeTag(){
         listeIngredients[0].append(tag);
     };
     for (let i = 0; i < listeAppareilsRecherche.length; i++) {
-        let tag =  p.cloneNode();
+        const tag =  p.cloneNode();
         tag.setAttribute('id', listeAppareilsRecherche[i]);
         tag.innerHTML = listeAppareilsRecherche[i];
         listeAppareils[0].append(tag);
     };
     for (let i = 0; i < listeUstensilesRecherche.length; i++) {
-        let tag =  p.cloneNode();
+        const tag =  p.cloneNode();
         tag.setAttribute('id', listeUstensilesRecherche[i]);
         tag.innerHTML = listeUstensilesRecherche[i];
         listeUstensiles[0].append(tag);
@@ -358,9 +358,9 @@ function afficheListeTag(){
  * Fonction qui gere l'ouverture des recherche par tag
  */
 function ouvreRechercheTag() {
-    let tagIngredient = document.querySelectorAll('.btn-primary');
-    let tagAppareil = document.querySelectorAll('.vert1');
-    let tagUstensiles = document.querySelectorAll('.rouge1');
+    const tagIngredient = document.querySelectorAll('.btn-primary');
+    const tagAppareil = document.querySelectorAll('.vert1');
+    const tagUstensiles = document.querySelectorAll('.rouge1');
     for (let i = 0; i < tagIngredient.length; i++) {
         tagIngredient[i].addEventListener('click', function(event){
             toggleAffichageTag(listeIngredients[0],event, listeAppareils[0], listeUstensiles[0]);
@@ -471,9 +471,9 @@ function clicTagCategorie(tag){
 }
 
 function ecouteRechercheTag(){
-    let champIngredients = document.getElementById('Ingredients');
-    let champAppareils = document.getElementById('Appareils');
-    let champUstensiles = document.getElementById('Ustensiles');
+    const champIngredients = document.getElementById('Ingredients');
+    const champAppareils = document.getElementById('Appareils');
+    const champUstensiles = document.getElementById('Ustensiles');
     let champs = [champAppareils, champIngredients, champUstensiles];
     for (let i = 0; i < champs.length; i++) {
         champs[i].addEventListener('keypress', function(event){
