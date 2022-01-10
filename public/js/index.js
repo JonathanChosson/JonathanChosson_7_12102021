@@ -265,40 +265,40 @@ function afficheListeTag(){
     if(rechercheEnCours.length === 0){
         for (let i = 0; i < recipes.length; i++) {
             for (let j = 0; j < recipes[i].ingredients.length; j++) {
-                if(!listeIngredientsRecherche.includes(recipes[i].ingredients[j].ingredient)){
-                    listeIngredientsRecherche.push(recipes[i].ingredients[j].ingredient);
+                if(!listeIngredientsRecherche.includes(recipes[i].ingredients[j].ingredient.toUpperCase())){
+                    listeIngredientsRecherche.push(recipes[i].ingredients[j].ingredient.toUpperCase());
                 }
             }
         };
         for (let i = 0; i < recipes.length; i++) {
-            if(!listeAppareilsRecherche.includes(recipes[i].appliance)){
-                listeAppareilsRecherche.push(recipes[i].appliance);
+            if(!listeAppareilsRecherche.includes(recipes[i].appliance.toUpperCase())){
+                listeAppareilsRecherche.push(recipes[i].appliance.toUpperCase());
             }
         };
         for (let i = 0; i < recipes.length; i++) {
             for (let j = 0; j < recipes[i].ustensils.length; j++) {
-                if(!listeUstensilesRecherche.includes(recipes[i].ustensils[j])){
-                    listeUstensilesRecherche.push(recipes[i].ustensils[j]);
+                if(!listeUstensilesRecherche.includes(recipes[i].ustensils[j].toUpperCase())){
+                    listeUstensilesRecherche.push(recipes[i].ustensils[j].toUpperCase());
                 }
             }
         }
     }else{
         for (let i = 0; i < rechercheEnCours.length; i++) {
             for (let j = 0; j < rechercheEnCours[i].ingredients.length; j++) {
-                if(!listeIngredientsRecherche.includes(rechercheEnCours[i].ingredients[j].ingredient)){
-                    listeIngredientsRecherche.push(rechercheEnCours[i].ingredients[j].ingredient);
+                if(!listeIngredientsRecherche.includes(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase())){
+                    listeIngredientsRecherche.push(rechercheEnCours[i].ingredients[j].ingredient.toUpperCase());
                 }
             }
         };
         for (let i = 0; i < rechercheEnCours.length; i++) {
-            if(!listeAppareilsRecherche.includes(rechercheEnCours[i].appliance)){
-                listeAppareilsRecherche.push(rechercheEnCours[i].appliance);
+            if(!listeAppareilsRecherche.includes(rechercheEnCours[i].appliance.toUpperCase())){
+                listeAppareilsRecherche.push(rechercheEnCours[i].appliance.toUpperCase());
             }
         };
         for (let i = 0; i < rechercheEnCours.length; i++) {
             for (let j = 0; j < rechercheEnCours[i].ustensils.length; j++) {
-                if(!listeUstensilesRecherche.includes(rechercheEnCours[i].ustensils[j])){
-                    listeUstensilesRecherche.push(rechercheEnCours[i].ustensils[j]);
+                if(!listeUstensilesRecherche.includes(rechercheEnCours[i].ustensils[j].toUpperCase())){
+                    listeUstensilesRecherche.push(rechercheEnCours[i].ustensils[j].toUpperCase());
                 }
             }
         }
