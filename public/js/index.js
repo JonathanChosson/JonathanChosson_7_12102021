@@ -154,17 +154,17 @@ function rechercheGlobal(tableauRecherche){
     if(rechercheEnCours.length <= 0){
         recipes.forEach(recette => {
             recette.ingredients.forEach(ingredient => {
-                if(ingredient.ingredient.toUpperCase() === tag){
+                if(ingredient.ingredient.toUpperCase().split(' ').includes(tag)){
                     tableauTemporaire.push(recette);
                     ajoutTagActif(tag , 'i');
                 }
             });
-            if(recette.appliance.toUpperCase() === tag){
+            if(recette.appliance.toUpperCase().split(' ').includes(tag)){
                 tableauTemporaire.push(recette);
                 ajoutTagActif(tag , 'a');
             };
             recette.ustensils.forEach(ustensil => {
-                if(ustensil.toUpperCase() === tag){
+                if(ustensil.toUpperCase().split(' ').includes(tag)){
                     tableauTemporaire.push(recette);
                     ajoutTagActif(tag , 'u');
                 }
@@ -180,17 +180,17 @@ function rechercheGlobal(tableauRecherche){
     }else{
         rechercheEnCours.forEach(recetteEnCours => {
             recetteEnCours.ingredients.forEach(ingredient => {
-                if(ingredient.ingredient.toUpperCase() === tag){
+                if(ingredient.ingredient.toUpperCase().split(' ').includes(tag)){
                     tableauTemporaire.push(recetteEnCours);
                     ajoutTagActif(tag , 'i');
                 }
             });
-            if(recetteEnCours.appliance.toUpperCase() === tag){
+            if(recetteEnCours.appliance.toUpperCase().split(' ').includes(tag)){
                 tableauTemporaire.push(recetteEnCours);
                 ajoutTagActif(tag , 'a');
             };
             recetteEnCours.ustensils.forEach(ustensil => {
-                if(ustensil.toUpperCase() === tag){
+                if(ustensil.toUpperCase().split(' ').includes(tag)){
                     tableauTemporaire.push(recetteEnCours);
                     ajoutTagActif(tag , 'u');
                 }
