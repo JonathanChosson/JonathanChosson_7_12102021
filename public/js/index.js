@@ -1,17 +1,17 @@
 import { recipes } from "./recipes.js";
 console.log(recipes);
 //Eléments du DOM
-let main = document.getElementById('main');
-let champRecherche = document.getElementById('champRecherche');
-let bntRecherche = document.getElementsByClassName('fa-search');
-let fermer = document.getElementsByClassName('fermer');
+const main = document.getElementById('main');
+const champRecherche = document.getElementById('champRecherche');
+const bntRecherche = document.getElementsByClassName('fa-search');
+const fermer = document.getElementsByClassName('fermer');
 
 //variables Globales
 let rechercheEnCours = [];
 let tagActif = [];
-let listeIngredients = document.querySelectorAll('.listeIngredients');
-let listeAppareils = document.querySelectorAll('.listeAppareils');
-let listeUstensiles = document.querySelectorAll('.listeUstensiles');
+const listeIngredients = document.querySelectorAll('.listeIngredients');
+const listeAppareils = document.querySelectorAll('.listeAppareils');
+const listeUstensiles = document.querySelectorAll('.listeUstensiles');
 
 /**
  * Génére et affiche une card par recette 
@@ -19,35 +19,35 @@ let listeUstensiles = document.querySelectorAll('.listeUstensiles');
  */
 function afficheCard(tableauEntree){
     main.innerHTML =``;
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     if(tableauEntree.length === 0){
         main.innerHTML = `<p class='h1 text-center'>Votre recherche ne renvoie aucun résultat`;
     }
     tableauEntree.forEach(recette => {
-        let card = div.cloneNode(true);
+        const card = div.cloneNode(true);
         card.classList.add('card','mb-2','cardPerso');
         // card.setAttribute('style', 'width:33%');
         card.innerHTML = `<img src="./public/images/recettes-de-cuisine-en-video.jpg" class="card-img-top" alt="Image de la recette">`;
-        let cardBody = div.cloneNode(true);
+        const cardBody = div.cloneNode(true);
         cardBody.classList.add('card-body','bg-light');
-        let divTitre = div.cloneNode(true);
+        const divTitre = div.cloneNode(true);
         divTitre.classList.add('d-flex','justify-content-between');
         divTitre.innerHTML =`
             <h5 class="card-title h6 col 5">${recette.name}</h5>
             <p class="font-weight-bold"><i class="far fa-clock"></i> ${recette.time} min</p>
         `;
-        let divRecette = div.cloneNode(true);
+        const divRecette = div.cloneNode(true);
         divRecette.classList.add('d-flex', 'justify-content-center');
-        let divIngredients = div.cloneNode(true);
+        const divIngredients = div.cloneNode(true);
         divIngredients.classList.add('d-flex', 'flex-column');
         recette.ingredients.forEach(ingredient => {
-            let span = document.createElement('small');
-            let quantite = ingredient.quantity === undefined ? '' : `: ${ingredient.quantity}`;
-            let unite = ingredient.unit === undefined ? '' : ingredient.unit;
+            const span = document.createElement('small');
+            const quantite = ingredient.quantity === undefined ? '' : `: ${ingredient.quantity}`;
+            const unite = ingredient.unit === undefined ? '' : ingredient.unit;
             span.innerHTML = `<span>${ingredient.ingredient} ${quantite} ${unite}</span>`;
             divIngredients.append(span)
         });
-        let divDescription = div.cloneNode(true);
+        const divDescription = div.cloneNode(true);
         divDescription.classList.add('col-6','ellipsisDesc');
         divDescription.innerHTML = `<p>${recette.description}</p>`;
         divRecette.append(divIngredients);
@@ -58,22 +58,26 @@ function afficheCard(tableauEntree){
         main.append(card);
     });
     afficheListeTag();
+<<<<<<< HEAD
     ecouteRecherche()
+=======
+    ecouteRecherche();
+>>>>>>> version2
 };
 
 /**
  * Affiche à l'utilisateur les tags actifs
  */
 function afficheTag(){
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     div.setAttribute('id', 'tagActif');
     if(document.getElementById('tagActif')){
         document.getElementById('tagActif').remove();
     }
-    let span = document.createElement('span');
+    const span = document.createElement('span');
     span.classList.add('badge', 'm-1');
     tagActif.forEach(tag => {
-        let spanActif = span.cloneNode();
+        const spanActif = span.cloneNode();
         if(tag.source === 'i'){
             spanActif.classList.add('badge-primary');
         }else if(tag.source === 'a'){
@@ -122,7 +126,7 @@ function rechercheTag(tableauRecherche){
     rechercheEnCours = [];
     tableauRecherche.forEach(recherche => {
         if(recherche.length > 2){
-            rechercheTagCategorie(recherche);
+            clicTagCategorie(recherche);
         }
     });
     afficheCard(rechercheEnCours);
@@ -149,43 +153,61 @@ function rechercheGlobal(tableauRecherche){
  * Vérifie que le mot en entrée est présent dans ingrédients 
  * @param {string} tag 
  */
-function rechercheTagCategorie(tag){
+ function rechercheTagCategorie(tag){
+    let tableauTemporaire = [];
     if(rechercheEnCours.length <= 0){
         recipes.forEach(recette => {
             recette.ingredients.forEach(ingredient => {
-                if(ingredient.ingredient.toUpperCase().includes(tag)){
-                    ajoutRecetteRecherche(recette);
+                if(ingredient.ingredient.toUpperCase().split(' ').includes(tag)){
+                    if(!tableauTemporaire.includes(recette)){
+                        tableauTemporaire.push(recette);
+                    }
                     ajoutTagActif(tag , 'i');
                 }
             });
-            if(recette.appliance.toUpperCase().includes(tag)){
-                ajoutRecetteRecherche(recette);
+            if(recette.appliance.toUpperCase().split(' ').includes(tag)){
+                if(!tableauTemporaire.includes(recette)){
+                    tableauTemporaire.push(recette);
+                }
                 ajoutTagActif(tag , 'a');
             };
             recette.ustensils.forEach(ustensil => {
-                if(ustensil.toUpperCase().includes(tag)){
-                    ajoutRecetteRecherche(recette);
+                if(ustensil.toUpperCase().split(' ').includes(tag)){
+                    if(!tableauTemporaire.includes(recette)){
+                        tableauTemporaire.push(recette);
+                    }
                     ajoutTagActif(tag , 'u');
                 }
             });
+            if(tableauTemporaire.length <= 0 ){
+                afficheCard(recipes);
+            }else{
+                rechercheEnCours = tableauTemporaire;
+                afficheCard(rechercheEnCours);
+            }
         });
 
     }else{
-        let tableauTemporaire = []
         rechercheEnCours.forEach(recetteEnCours => {
             recetteEnCours.ingredients.forEach(ingredient => {
-                if(ingredient.ingredient.toUpperCase().includes(tag) === true){
-                    tableauTemporaire.push(recetteEnCours);
+                if(ingredient.ingredient.toUpperCase().split(' ').includes(tag)){
+                    if(!tableauTemporaire.includes(recetteEnCours)){
+                        tableauTemporaire.push(recetteEnCours);
+                    }
                     ajoutTagActif(tag , 'i');
                 }
             });
-            if(recetteEnCours.appliance.toUpperCase().includes(tag) === true){
-                tableauTemporaire.push(recetteEnCours);
+            if(recetteEnCours.appliance.toUpperCase().split(' ').includes(tag)){
+                if(!tableauTemporaire.includes(recetteEnCours)){
+                    tableauTemporaire.push(recetteEnCours);
+                }
                 ajoutTagActif(tag , 'a');
             };
             recetteEnCours.ustensils.forEach(ustensil => {
-                if(ustensil.toUpperCase().includes(tag) === true){
-                    tableauTemporaire.push(recetteEnCours);
+                if(ustensil.toUpperCase().split(' ').includes(tag)){
+                    if(!tableauTemporaire.includes(recetteEnCours)){
+                        tableauTemporaire.push(recetteEnCours);
+                    }
                     ajoutTagActif(tag , 'u');
                 }
             });
@@ -193,8 +215,8 @@ function rechercheTagCategorie(tag){
         if(tableauTemporaire.length > 0 ){
             rechercheEnCours = tableauTemporaire;
         }
+        afficheCard(rechercheEnCours);
     }
-    afficheCard(rechercheEnCours);
 }
 
 /**
@@ -261,61 +283,61 @@ function afficheListeTag(){
     if(rechercheEnCours.length === 0){
         recipes.forEach(recette => {
             recette.ingredients.forEach(ingredient => {
-                if(!listeIngredientsRecherche.includes(ingredient.ingredient)){
-                    listeIngredientsRecherche.push(ingredient.ingredient);
+                if(!listeIngredientsRecherche.includes(ingredient.ingredient.toUpperCase())){
+                    listeIngredientsRecherche.push(ingredient.ingredient.toUpperCase());
                 }
             });
-            if(!listeAppareilsRecherche.includes(recette.appliance)){
-                listeAppareilsRecherche.push(recette.appliance);
+            if(!listeAppareilsRecherche.includes(recette.appliance.toUpperCase())){
+                listeAppareilsRecherche.push(recette.appliance.toUpperCase());
             };
             recette.ustensils.forEach(ustensil => {
-                if(!listeUstensilesRecherche.includes(ustensil)){
-                    listeUstensilesRecherche.push(ustensil);
+                if(!listeUstensilesRecherche.includes(ustensil.toUpperCase())){
+                    listeUstensilesRecherche.push(ustensil.toUpperCase());
                 }
             });
         });
     }else{
         rechercheEnCours.forEach(recetteEnCours => {
             recetteEnCours.ingredients.forEach(ingredient => {
-                if(!listeIngredientsRecherche.includes(ingredient.ingredient)){
-                    listeIngredientsRecherche.push(ingredient.ingredient);
+                if(!listeIngredientsRecherche.includes(ingredient.ingredient.toUpperCase())){
+                    listeIngredientsRecherche.push(ingredient.ingredient.toUpperCase());
                 }
             });
-            if(!listeAppareilsRecherche.includes(recetteEnCours.appliance)){
-                listeAppareilsRecherche.push(recetteEnCours.appliance);
+            if(!listeAppareilsRecherche.includes(recetteEnCours.appliance.toUpperCase())){
+                listeAppareilsRecherche.push(recetteEnCours.appliance.toUpperCase());
             };
             recetteEnCours.ustensils.forEach(ustensil => {
-                if(!listeUstensilesRecherche.includes(ustensil)){
-                    listeUstensilesRecherche.push(ustensil);
+                if(!listeUstensilesRecherche.includes(ustensil.toUpperCase())){
+                    listeUstensilesRecherche.push(ustensil.toUpperCase());
                 }
             });
         });
     }
-    let listeIngredients = document.querySelectorAll('.listeIngredients');
-    let listeAppareils = document.querySelectorAll('.listeAppareils');
-    let listeUstensiles = document.querySelectorAll('.listeUstensiles');
+    const listeIngredients = document.querySelectorAll('.listeIngredients');
+    const listeAppareils = document.querySelectorAll('.listeAppareils');
+    const listeUstensiles = document.querySelectorAll('.listeUstensiles');
 
     
     listeIngredients[0].innerHTML = '';
     listeAppareils[0].innerHTML = '';
     listeUstensiles[0].innerHTML ='';
 
-    let p = document.createElement('p');
+    const p = document.createElement('p');
     p.classList.add('btnTag');
     listeIngredientsRecherche.forEach(ingredient => {
-        let tag =  p.cloneNode();
+        const tag =  p.cloneNode();
         tag.setAttribute('id', ingredient);
         tag.innerHTML = ingredient;
         listeIngredients[0].append(tag);
     });
     listeAppareilsRecherche.forEach(appareil => {
-        let tag =  p.cloneNode();
+        const tag =  p.cloneNode();
         tag.setAttribute('id', appareil);
         tag.innerHTML = appareil;
         listeAppareils[0].append(tag);
     });
     listeUstensilesRecherche.forEach(ustensile => {
-        let tag =  p.cloneNode();
+        const tag =  p.cloneNode();
         tag.setAttribute('id', ustensile);
         tag.innerHTML = ustensile;
         listeUstensiles[0].append(tag);
@@ -328,9 +350,9 @@ function afficheListeTag(){
  * Fonction qui gere l'ouverture des recherche par tag
  */
 function ouvreRechercheTag() {
-    let tagIngredient = document.querySelectorAll('.btn-primary');
-    let tagAppareil = document.querySelectorAll('.vert1');
-    let tagUstensiles = document.querySelectorAll('.rouge1');
+    const tagIngredient = document.querySelectorAll('.btn-primary');
+    const tagAppareil = document.querySelectorAll('.vert1');
+    const tagUstensiles = document.querySelectorAll('.rouge1');
     tagIngredient.forEach(btnTag => {
         btnTag.addEventListener('click', function(event){
             toggleAffichageTag(listeIngredients[0],event, listeAppareils[0], listeUstensiles[0]);
@@ -380,19 +402,70 @@ function ecouteClicTag(){
     let btnTag = document.querySelectorAll('.btnTag');
     btnTag.forEach(btn => {
         btn.addEventListener('click', function(){
-            rechercheTagCategorie(btn.id.toUpperCase());
+            clicTagCategorie(btn.id.toUpperCase());
         })
     });
 };
 
+/**
+ * Vérifie que le mot en entrée est présent dans ingrédients 
+ * @param {string} tag 
+ */
+function clicTagCategorie(tag){
+    if(rechercheEnCours.length <= 0){
+        recipes.forEach(recette => {
+            recette.ingredients.forEach(ingredient => {
+                if(ingredient.ingredient.toUpperCase().includes(tag)){
+                    ajoutRecetteRecherche(recette);
+                    ajoutTagActif(tag , 'i');
+                }
+            });
+            if(recette.appliance.toUpperCase().includes(tag)){
+                ajoutRecetteRecherche(recette);
+                ajoutTagActif(tag , 'a');
+            };
+            recette.ustensils.forEach(ustensil => {
+                if(ustensil.toUpperCase().includes(tag)){
+                    ajoutRecetteRecherche(recette);
+                    ajoutTagActif(tag , 'u');
+                }
+            });
+        });
+
+    }else{
+        let tableauTemporaire = []
+        rechercheEnCours.forEach(recetteEnCours => {
+            recetteEnCours.ingredients.forEach(ingredient => {
+                if(ingredient.ingredient.toUpperCase().includes(tag) === true){
+                    tableauTemporaire.push(recetteEnCours);
+                    ajoutTagActif(tag , 'i');
+                }
+            });
+            if(recetteEnCours.appliance.toUpperCase().includes(tag) === true){
+                tableauTemporaire.push(recetteEnCours);
+                ajoutTagActif(tag , 'a');
+            };
+            recetteEnCours.ustensils.forEach(ustensil => {
+                if(ustensil.toUpperCase().includes(tag) === true){
+                    tableauTemporaire.push(recetteEnCours);
+                    ajoutTagActif(tag , 'u');
+                }
+            });
+        });
+        if(tableauTemporaire.length > 0 ){
+            rechercheEnCours = tableauTemporaire;
+        }
+    }
+    afficheCard(rechercheEnCours);
+}
 
 /**
  * Ecoute la saisie dans les champs de tag 
  */
 function ecouteRechercheTag(){
-    let champIngredients = document.getElementById('Ingredients');
-    let champAppareils = document.getElementById('Appareils');
-    let champUstensiles = document.getElementById('Ustensiles');
+    const champIngredients = document.getElementById('Ingredients');
+    const champAppareils = document.getElementById('Appareils');
+    const champUstensiles = document.getElementById('Ustensiles');
     let champs = [champAppareils, champIngredients, champUstensiles];
     champs.forEach(champ => {
         champ.addEventListener('keypress', function(event){
