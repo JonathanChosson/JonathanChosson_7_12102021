@@ -58,11 +58,7 @@ function afficheCard(tableauEntree){
         main.append(card);
     });
     afficheListeTag();
-<<<<<<< HEAD
-    ecouteRecherche()
-=======
     ecouteRecherche();
->>>>>>> version2
 };
 
 /**
